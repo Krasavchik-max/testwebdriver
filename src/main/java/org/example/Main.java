@@ -51,9 +51,13 @@ public class Main {
 
         waitingDriver(10000L);
 
-        for (int i = 0; i < 999; i++) {
-            timeCheckOut();
+
+        for (int i = 0; i < 10; i++) {
+            timeCheckOut(driver);
+            waitingDriver(60000L);
         }
+
+
 
     }
 
@@ -66,24 +70,25 @@ public class Main {
             e.printStackTrace();
         }
     }
+   public static void timeCheckOut(WebDriver driver){
+       driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
+       waitingDriver(3000L);
+       driver.findElement(By.xpath("//span[contains(text(),' Other D-visa ')]")).click();
 
-    public static void timeCheckOut(){
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            public void run() {
-                WebDriver driver = new ChromeDriver();
-                driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
-                driver.findElement(By.xpath("//span[contains(text(),' Other D-visa ')]")).click();
+       waitingDriver(10000L);
+       driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
+       waitingDriver(3000L);
+       driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
 
-                waitingDriver(10000L);
-                driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
+       waitingDriver(10000L);
 
-                WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
-                String textElement = webElement.getText();
-                System.out.println(textElement);
-            }
-        }, 0, 7 * 60 * 1000);
+       WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
+       String textElement = webElement.getText();
+       System.out.println(textElement);
+
+
+   }
 
     }
-}
+
 
