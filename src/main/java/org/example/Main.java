@@ -7,6 +7,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static org.example.LoginAndPassword.LGN;
 
 public class Main {
@@ -48,24 +51,39 @@ public class Main {
 
         waitingDriver(10000L);
 
-        driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
-        System.out.println("Подкатегория");
-        driver.findElement(By.xpath("//span[contains(text(),'Karta Polaka D-visa')]")).click();
-
-        waitingDriver(10000L);
-
-        WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
-        String textElement = webElement.getText();
-        System.out.println(textElement);
-
+        for (int i = 0; i < 999; i++) {
+            timeCheckOut();
+        }
 
     }
+
+
+
     public static void waitingDriver(Long number){
         try {
             Thread.sleep(number);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void timeCheckOut(){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                WebDriver driver = new ChromeDriver();
+                driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
+                driver.findElement(By.xpath("//span[contains(text(),' Other D-visa ')]")).click();
+
+                waitingDriver(10000L);
+                driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
+
+                WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
+                String textElement = webElement.getText();
+                System.out.println(textElement);
+            }
+        }, 0, 7 * 60 * 1000);
+
     }
 }
 
