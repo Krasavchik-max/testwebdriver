@@ -18,17 +18,20 @@ public class Main {
         new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("mat-input-0")));
         driver.findElement(By.id("mat-input-0")).sendKeys(LGN);
         driver.findElement(By.id("mat-input-1")).sendKeys(LoginAndPassword.PSWD);
-        driver.findElement(By.xpath("//span[@class='mat-button-wrapper']")).click();
+        driver.findElement(By.xpath("//button[contains(@class,'ng-star-inserted')]")).click();
         System.out.println("До таймаута");
 
 
 
-        waitingDriver(15000L);
+        waitingDriver(10000L);
         System.out.println("После таймаута");
         driver.findElement(By.xpath("//button[contains(@class,'z-index-999')]")).click();
 
 
-        waitingDriver(15000L);
+        waitingDriver(10000L);
+
+
+
 
 
         driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-4')]")).click();
@@ -36,24 +39,25 @@ public class Main {
         driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-Grodno')]")).click();
 
 
-        waitingDriver(15000L);
+        waitingDriver(10000L);
 
 
         driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-6')]")).click();
         System.out.println("Категория Записи");
         driver.findElement(By.xpath("//span[contains(text(),'National Visa D')]")).click();
 
-        waitingDriver(15000L);
+        waitingDriver(10000L);
 
         driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
         System.out.println("Подкатегория");
         driver.findElement(By.xpath("//span[contains(text(),'Karta Polaka D-visa')]")).click();
 
-        waitingDriver(15000L);
+        waitingDriver(10000L);
 
         WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
         String textElement = webElement.getText();
         System.out.println(textElement);
+
 
     }
     public static void waitingDriver(Long number){
