@@ -12,7 +12,7 @@ import static org.example.LoginAndPassword.LGN;
 public class Main {
     public static void main(String[] args) {
         System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = new ChromeDriver(); 
 
         driver.get("https://visa.vfsglobal.com/blr/ru/pol/login");
         new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("mat-input-0")));
