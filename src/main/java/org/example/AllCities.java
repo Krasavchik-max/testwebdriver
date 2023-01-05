@@ -22,8 +22,7 @@ public class AllCities {
         driver.findElement(By.xpath("//*[@id=\"onetrust-close-btn-container\"]/button")).click();
         timer(5000L);
 
-        //c
-        // lick Login button
+        // click Login button
         driver.findElement(By.xpath("//button[contains(@class,'ng-star-inserted')]")).click();
         timer(15000L);
 
@@ -31,7 +30,7 @@ public class AllCities {
         driver.findElement(By.xpath("//button[contains(@class,'z-index-999')]")).click();
         timer(10000L);
 
-        //array of cities
+        //select city from array
         String[] cities = {"Grodno", "Baranovichi", "Brest", "Gomel", "Lida", "Minsk", "Mogilev", "Pinsk"};
 
         //replace element of cities
@@ -69,8 +68,7 @@ public class AllCities {
         timer(10000L);
 
         // print text result
-        WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
-        String textElement = webElement.getText();
+        String textElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]")).getText();
         System.out.println(textElement + "\n");
     }
 }
