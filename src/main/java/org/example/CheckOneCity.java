@@ -12,7 +12,7 @@ import static org.example.LoginAndPassword.LGN;
 public class CheckOneCity {
     public static void main(String[] args) {
         //driver launch
-        System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
+//        System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
         // go to website, login and put away cookie
@@ -20,29 +20,33 @@ public class CheckOneCity {
         new WebDriverWait(driver, 15).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("mat-input-0")));
         driver.findElement(By.id("mat-input-0")).sendKeys(LGN);
         driver.findElement(By.id("mat-input-1")).sendKeys(LoginAndPassword.PSWD);
+
+        timer(5000L);
         driver.findElement(By.xpath("//*[@id=\"onetrust-close-btn-container\"]/button")).click();
-        waitingDriver(5000L);
+
+        //Click Login button
         driver.findElement(By.xpath("//button[contains(@class,'ng-star-inserted')]")).click();
+        timer(15000L);
 
-
-        //click on button and go to choose center of this city and fill all them(by xpath)
-        waitingDriver(15000L);
+        //click booking button
         driver.findElement(By.xpath("//button[contains(@class,'z-index-999')]")).click();
-        waitingDriver(2000L);
+        timer(2000L);
+
+        //select VC
         driver.findElement(By.xpath("//span[contains(text(),'Выберите свой визовый центр')]")).click();
-        System.out.println("Визовый центр ");
         driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-Grodno')]")).click();
-        waitingDriver(10000L);
+        timer(10000L);
+
+        //select category
         driver.findElement(By.xpath("//span[contains(text(),'Выберите категорию записи')]")).click();
-        System.out.println("Категория Записи");
         driver.findElement(By.xpath("//span[contains(text(), ' National Visa D ')]")).click();
-        waitingDriver(10000L);
+        timer(10000L);
 
 
         // loop method 100 times every 8 minutes
         for (int i = 0; i < 100; i++) {
             timeCheckOut(driver);
-            waitingDriver(480000L);
+            timer(480000L);
         }
 
 
@@ -50,7 +54,7 @@ public class CheckOneCity {
 
 
     //a method that pauses the driver
-    public static void waitingDriver(Long number) {
+    public static void timer(Long number) {
         try {
             Thread.sleep(number);
         } catch (InterruptedException e) {
@@ -60,21 +64,22 @@ public class CheckOneCity {
 
     // change Other D-Visa to Karta Polaka
     public static void timeCheckOut(WebDriver driver) {
-        waitingDriver(10000L);
+        
+        timer(10000L);
         driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
-        waitingDriver(2000L);
+        timer(2000L);
         driver.findElement(By.xpath("//span[contains(text(),'Other D-visa')]")).click();
-        waitingDriver(10000L);
+        timer(10000L);
         driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
-        waitingDriver(2000L);
+        timer(2000L);
         driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
-        waitingDriver(10000L);
+        timer(10000L);
 
-        // output to the console the time when the method happened
+        // print time stamp
         String dateTime = DateTimeFormatter.ofPattern("MMM dd YYYY, hh:mm:ss a").format(LocalDateTime.now());
-        System.out.println(" " + dateTime);
+        System.out.print( dateTime + " ");
 
-        // console output text
+        // print text result
         WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
         String textElement = webElement.getText();
         System.out.println(textElement);
