@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import static org.example.LoginAndPassword.LGN;
 
-public class CheckOneCity {
+public class OneCity {
     public static void main(String[] args) {
         //driver launch
 //        System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
@@ -81,8 +81,8 @@ public class CheckOneCity {
 
         // print text result
         WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
-        String textElement = webElement.getText();
-        System.out.println(textElement);
+        String textResult = webElement.getText();
+        System.out.println(textResult);
     }
 }
 
