@@ -6,12 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import static org.example.LoginAndPassword.LGN;
-
 public class OneCity {
     public static void main(String[] args) {
         //driver launch
@@ -21,7 +17,7 @@ public class OneCity {
         // open login page, and login
         driver.get("https://visa.vfsglobal.com/blr/ru/pol/login");
         new WebDriverWait(driver, 15).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("mat-input-0")));
-        driver.findElement(By.id("mat-input-0")).sendKeys(LGN);
+        driver.findElement(By.id("mat-input-0")).sendKeys(LoginAndPassword.LGN);
         driver.findElement(By.id("mat-input-1")).sendKeys(LoginAndPassword.PSWD);
         timer(5000L);
 
@@ -49,7 +45,7 @@ public class OneCity {
 
         // loop method 100 times every 8 minutes
         for (int i = 0; i < 100; i++) {
-            timeCheckOut(driver);
+            changeVisaType(driver);
             timer(480000L);
         }
 
@@ -67,7 +63,7 @@ public class OneCity {
     }
 
     // change Other D-Visa to Karta Polaka
-    public static void timeCheckOut(WebDriver driver) {
+    public static void changeVisaType(WebDriver driver) {
 
         timer(10000L);
         driver.findElement(By.xpath("//*[@id=\"mat-select-value-5\"]/span")).click();
