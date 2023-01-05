@@ -21,12 +21,11 @@ public class Main {
         driver.findElement(By.id("mat-input-0")).sendKeys(LGN);
         driver.findElement(By.id("mat-input-1")).sendKeys(LoginAndPassword.PSWD);
         driver.findElement(By.xpath("//button[contains(@class,'ng-star-inserted')]")).click();
-        System.out.println("До таймаута");
+
 
 
 
         waitingDriver(15000L);
-        System.out.println("После таймаута");
         driver.findElement(By.xpath("//button[contains(@class,'z-index-999')]")).click();
 
 

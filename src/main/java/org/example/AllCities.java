@@ -40,10 +40,10 @@ public class AllCities {
     }
     public static void timeCheckOut(WebDriver driver) {
         waitingDriver(10000L);
-        driver.findElement(By.xpath("//span[contains(text(),'Выберите категорию записи')]")).click();
+        driver.findElement(By.xpath("//*[@id=\"mat-select-value-3\"]/span")).click();
         driver.findElement(By.xpath("//span[contains(text(), ' National Visa D ')]")).click();
         waitingDriver(10000L);
-        driver.findElement(By.xpath("//span[contains(@class,'ng-tns-c85-8')]")).click();
+        driver.findElement(By.xpath("//*[@id=\"mat-select-value-5\"]/span")).click();
         waitingDriver(2000L);
         driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
         waitingDriver(10000L);
