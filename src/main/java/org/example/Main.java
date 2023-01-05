@@ -20,21 +20,14 @@ public class Main {
         new WebDriverWait(driver, 15).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("mat-input-0")));
         driver.findElement(By.id("mat-input-0")).sendKeys(LGN);
         driver.findElement(By.id("mat-input-1")).sendKeys(LoginAndPassword.PSWD);
+        driver.findElement(By.xpath("//*[@id=\"onetrust-close-btn-container\"]/button")).click();
+        waitingDriver(5000L);
         driver.findElement(By.xpath("//button[contains(@class,'ng-star-inserted')]")).click();
-
-
 
 
         waitingDriver(15000L);
         driver.findElement(By.xpath("//button[contains(@class,'z-index-999')]")).click();
-
-
-        waitingDriver(10000L);
-
-
-
-
-
+        waitingDriver(2000L);
         driver.findElement(By.xpath("//span[contains(text(),'Выберите свой визовый центр')]")).click();
         System.out.println("Визовый центр ");
         driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-Grodno')]")).click();
