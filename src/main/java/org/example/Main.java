@@ -51,9 +51,9 @@ public class Main {
         waitingDriver(10000L);
 
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             timeCheckOut(driver);
-            waitingDriver(60000L);
+            waitingDriver(480000L);
         }
 
 
@@ -87,7 +87,7 @@ public class Main {
 
       String dateTime = DateTimeFormatter.ofPattern("MMM dd YYYY, hh:mm:ss a").format(LocalDateTime.now());
        System.out.println(textElement);
-       System.out.print(dateTime);
+       System.out.println(" " + dateTime);
 
 
 
