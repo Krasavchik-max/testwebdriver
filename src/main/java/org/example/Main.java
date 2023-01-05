@@ -6,10 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.example.LoginAndPassword.LGN;
 
@@ -87,9 +85,9 @@ public class Main {
        WebElement webElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]"));
        String textElement = webElement.getText();
 
-       Date date = new Date();
+      String dateTime = DateTimeFormatter.ofPattern("MMM dd YYYY, hh:mm:ss a").format(LocalDateTime.now());
        System.out.println(textElement);
-       System.out.print(date);
+       System.out.print(dateTime);
 
 
 
