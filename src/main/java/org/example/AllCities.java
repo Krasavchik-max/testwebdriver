@@ -48,7 +48,7 @@ public class AllCities {
                 }
                 //driver ends
                 driver.close();
-            }
+              }
 
             //a method that pauses the driver
             public static void timer(Long number) {
