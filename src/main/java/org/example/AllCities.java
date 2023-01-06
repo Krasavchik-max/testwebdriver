@@ -79,5 +79,5 @@ public class AllCities {
         };
         timer.scheduleAtFixedRate(task, 0,15 * 60 * 1000);
      }
-   }
+  }
 
