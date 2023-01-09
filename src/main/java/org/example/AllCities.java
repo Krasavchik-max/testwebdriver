@@ -6,15 +6,18 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 public class AllCities {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, UnsupportedAudioFileException, LineUnavailableException, IOException {
 
         //driver launch
-        System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
+     //   System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
         // open login page, and login
@@ -43,7 +46,7 @@ public class AllCities {
     }
 
     // select category and visa type
-    public static void getDatesFromAllCities(WebDriver driver) throws InterruptedException {
+    public static void getDatesFromAllCities(WebDriver driver) throws InterruptedException, UnsupportedAudioFileException, LineUnavailableException, IOException {
 
         //city array
         String[] cities = {"Grodno", "Lida", "Minsk", "Baranovichi", "Brest", "Pinsk", "Gomel", "Mogilev"};
@@ -52,25 +55,29 @@ public class AllCities {
             //select city
             driver.findElement(By.xpath("//*[@id=\"mat-select-value-1\"]/span")).click();
             System.out.println(cities[i]);
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(2);
             driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-" + cities[i] + "')]")).click();
-            TimeUnit.SECONDS.sleep(10);
+            TimeUnit.SECONDS.sleep(5);
 
             // select kind of visa
             driver.findElement(By.xpath("//*[@id=\"mat-select-value-3\"]/span")).click();
             TimeUnit.SECONDS.sleep(2);
             driver.findElement(By.xpath("//span[contains(text(), ' National Visa D ')]")).click();
-            TimeUnit.SECONDS.sleep(10);
+            TimeUnit.SECONDS.sleep(5);
 
             // select type of visa
             driver.findElement(By.xpath("//*[@id=\"mat-select-value-5\"]/span")).click();
             TimeUnit.SECONDS.sleep(2);
             driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
-            TimeUnit.SECONDS.sleep(10);
+            TimeUnit.SECONDS.sleep(5);
 
             // print text result
             String textElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]")).getText();
             System.out.println(textElement + "\n");
+            if (cities[i] == "Grodno" && !textElement.equals("В настоящее время нет свободных мест для записи")){
+                PlayAudio.main();
+                System.out.println("ЕСТЬ ДАТЫ !!!");
+            }
         }
     }
 }
