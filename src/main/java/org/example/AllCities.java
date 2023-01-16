@@ -5,9 +5,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import static org.example.ConnectionToDB.*;
 
 public class AllCities {
-    public static void main(String[] args) {
+    public static void main(String[] args)  throws SQLException {
 
         //driver launch
         System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
@@ -28,11 +33,12 @@ public class AllCities {
         timer(15000L);
 
         //click booking button
-        driver.findElement(By.xpath("//button[contains(@class,'z-index-999')]")).click();
+        driver.findElement(By.xpath("/html/body/app-root/div/app-dashboard/section[1]/div/div[1]/div[2]/button/span[1]")).click();
         timer(10000L);
 
         for (int i = 0; i < 100; i++) {
             changeCity(driver);
+            System.out.println("------------------------------------------------------------------------");
             timer(480000L);
 
         }
@@ -52,33 +58,45 @@ public class AllCities {
     public static void changeCity(WebDriver driver) {
 
         //select city from array
-        String[] cities = {"Grodno", "Baranovichi", "Brest", "Gomel", "Lida", "Minsk", "Mogilev", "Pinsk"};
+        String[] cities = {"Baranovichi", "Brest", "Gomel", "Grodno", "Lida", "Minsk", "Mogilev", "Pinsk"};
 
         //replace element of cities
         for (int i = 0; i < cities.length; i++) {
             timer(5000L);
             driver.findElement(By.xpath("//*[@id=\"mat-select-value-1\"]/span")).click();
             System.out.println("Визовый центр " + cities[i]);
-            timer(5000L);
+            timer(2000L);
             driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-" + cities[i] + "')]")).click();
 
         // select type and kind of visa
             timer(10000L);
             driver.findElement(By.xpath("//*[@id=\"mat-select-value-3\"]/span")).click();
-            timer(2000L);
             driver.findElement(By.xpath("//span[contains(text(), ' National Visa D ')]")).click();
             timer(10000L);
             driver.findElement(By.xpath("//*[@id=\"mat-select-value-5\"]/span")).click();
-            timer(2000L);
             driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
-            timer(10000L);
+            timer(7000L);
 
             // print text result
             String textElement = driver.findElement(By.xpath("//div[contains(@class,'alert-info')]")).getText();
             System.out.println(textElement + "\n");
+
+
+            //connect to DB and send request
+            try {
+                Connection connection = DriverManager.getConnection(URL,USER,PASSWORD);
+                Statement statement = connection.createStatement();
+                statement.execute("insert into visacenter (city,message,date_time) values ('"+ cities[i] +"','"+textElement+"',NOW())");
+                System.out.println("Add to DB successfully");
+
+            }  catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+
         }
     }
-}
+
 
 
 
