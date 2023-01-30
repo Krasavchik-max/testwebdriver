@@ -45,10 +45,10 @@ public class AllCities {
             TimeUnit.SECONDS.sleep(10);
 
             // Setup 2 iterations of get dates
-            for (int j = 0; j < 2; j++) {
+            for (int j = 0; j < 3; j++) {
                 System.out.println(DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm:ss a").format(LocalDateTime.now()));
                 getDatesFromAllCities(driver);
-                TimeUnit.MINUTES.sleep(14);
+                TimeUnit.MINUTES.sleep(10);
             }
             driver.close();
         }
@@ -100,6 +100,7 @@ public class AllCities {
             if (cities[i].equals("Grodno") && (!textElement.equals("В настоящее время нет свободных мест для записи") &&
                     !textElement.equals("Произошла ошибка. Пожалуйста, попробуйте еще раз через некоторое время."))) {
                 PlayAudio.main();
+                SendEmail.sendEmail("ЕСТЬ ДАТЫ !!! - " + cities[i], cities[i]+ " " + textElement);
                 System.out.println("ЕСТЬ ДАТЫ !!!");
             }
         }
