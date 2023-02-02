@@ -64,7 +64,7 @@ public class AllCities {
 
 
     //city array
-    public static String[] cities = {"Grodno", "Lida", "Minsk", "Baranovichi", "Brest", "Pinsk", "Gomel", "Mogilev"};
+    public static String[] cities = {"Baranovichi", "Lida", "Minsk", "Grodno", "Brest", "Pinsk", "Gomel", "Mogilev"};
 
     // select category and visa type
     public static void getDatesFromAllCities(WebDriver driver) throws
@@ -102,12 +102,70 @@ public class AllCities {
             }
 
             //check date and play sound
-            if (cities[i].equals("Gomel") && (!textElement.equals("В настоящее время нет свободных мест для записи") &&
+            if (cities[i].equals("Baranovichi") && (!textElement.equals("В настоящее время нет свободных мест для записи") &&
                     !textElement.equals("Произошла ошибка. Пожалуйста, попробуйте еще раз через некоторое время."))) {
                 System.out.println("ЕСТЬ ДАТЫ !!!");
+                driver.findElement(By.xpath("/html/body/app-root/div/app-eligibility-criteria/section/form/mat-card[2]/button")).click();
+                TimeUnit.SECONDS.sleep(5);
+                fillForm(driver);
                 sendEmail();
             }
         }
+    }
+
+    public static void fillForm(WebDriver driver) throws InterruptedException {
+        //identification number
+        driver.findElement(By.xpath("//*[@id=\"mat-input-2\"]")).sendKeys(LoginAndPassword.identificationNumber);
+
+        //name and surname
+        driver.findElement(By.xpath("//*[@id=\"mat-input-4\"]")).sendKeys(LoginAndPassword.name);
+        driver.findElement(By.xpath("//*[@id=\"mat-input-5\"]")).sendKeys(LoginAndPassword.surName);
+
+        //sex
+        driver.findElement(By.xpath("//*[@id=\"mat-select-value-7\"]/span")).click();
+        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.xpath("//*[@id=\"mat-option-254\"]/span")).click();
+        TimeUnit.SECONDS.sleep(2);
+
+        //date of birthday
+        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(LoginAndPassword.dayOfBirth);
+        TimeUnit.SECONDS.sleep(1);
+        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(LoginAndPassword.monthOfBirth);
+        TimeUnit.SECONDS.sleep(1);
+        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(LoginAndPassword.yearOfBirth);
+        TimeUnit.SECONDS.sleep(1);
+
+
+        //country
+        driver.findElement(By.xpath("//*[@id=\"mat-select-value-9\"]/span")).click();
+        TimeUnit.SECONDS.sleep(1);
+        driver.findElement(By.xpath("//*[@id=\"mat-option-33\"]/span")).click();
+        TimeUnit.SECONDS.sleep(2);
+
+        //number of pasport
+        driver.findElement(By.xpath("//*[@id=\"mat-input-6\"]")).sendKeys(LoginAndPassword.passportNumber);
+        TimeUnit.SECONDS.sleep(2);
+
+
+        //passport validity period
+        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endDayOfPassport);
+        TimeUnit.SECONDS.sleep(1);
+        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endMonthOfPassport);
+        TimeUnit.SECONDS.sleep(1);
+        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endYearOfPassport);
+        TimeUnit.SECONDS.sleep(2);
+
+        //country number
+        driver.findElement(By.xpath("//*[@id=\"mat-input-7\"]")).sendKeys(LoginAndPassword.countryNumber);
+
+        //number
+        driver.findElement(By.xpath("//*[@id=\"mat-input-8\"]")).sendKeys(LoginAndPassword.contactNumber);
+
+        //email
+        driver.findElement(By.xpath("//*[@id=\"mat-input-9\"]")).sendKeys(LoginAndPassword.LGN);
+        TimeUnit.SECONDS.sleep(2);
+
+
     }
 
 }
