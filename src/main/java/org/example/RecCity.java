@@ -29,7 +29,7 @@ public class RecCity {
 
         driver.findElement(By.xpath("//span[contains(text(),'Выберите свой визовый центр')]")).click();
         System.out.println("Визовый центр ");
-        driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-Gomel')]")).click();
+        driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-Grodno')]")).click();
 
 
         waitingDriver(10000L);
