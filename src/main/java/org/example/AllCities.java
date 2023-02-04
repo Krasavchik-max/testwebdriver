@@ -152,7 +152,16 @@ public class AllCities {
         //email
         driver.findElement(By.xpath("//*[@id=\"mat-input-9\"]")).sendKeys(LGN);
         TimeUnit.SECONDS.sleep(2);
-
+        
+        authenticationSMS(driver);
+    
+    }
+    
+    public static void authenticationSMS(WebDriver driver){
+        driver.get("https://ioauth.raschet.by/oauth/authorize?client_id=uQv6qI8iYhhQBBd77t73WnD45ZpiDauk&scope=msi_national_id_number+msi_subject&response_type=token&authentication=online_otp&redirect_uri=https://ticketing.raschet.by/vfs/web");
+        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[1]/input")).sendKeys(identificationNumber);
+        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[2]/div/input")).sendKeys("+" + countryNumber + contactNumber);
+        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[4]/button[1]")).click();
 
     }
 
