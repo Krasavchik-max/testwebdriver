@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,6 +15,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
+
+import static org.example.LoginAndPassword.*;
+import static org.example.SendEmail.sendEmail;
 
 public class AllCities {
 
@@ -61,7 +63,6 @@ public class AllCities {
         } catch (Exception e) {
             System.out.println("Exception login");
         }
-
     }
 
 
@@ -120,6 +121,7 @@ public class AllCities {
                     PlayAudio.main();
                     SendEmail.sendEmail("ЕСТЬ ДАТЫ !!! - " + cities[i], cities[i] + " " + textElement);
                     System.out.println("ЕСТЬ ДАТЫ !!!");
+                    fillForm(driver);
                 }
 
             }
@@ -130,15 +132,14 @@ public class AllCities {
         }
         return 10;
     }
-
-
     public static void fillForm(WebDriver driver) throws InterruptedException {
-        //identification number
-        driver.findElement(By.xpath("//*[@id=\"mat-input-2\"]")).sendKeys(LoginAndPassword.identificationNumber);
+        String[] arrayDateOfBirth = dateOfBirth.split("/");
+                //identification number
+        driver.findElement(By.xpath("//*[@id=\"mat-input-2\"]")).sendKeys(identificationNumber);
 
         //name and surname
-        driver.findElement(By.xpath("//*[@id=\"mat-input-4\"]")).sendKeys(LoginAndPassword.name);
-        driver.findElement(By.xpath("//*[@id=\"mat-input-5\"]")).sendKeys(LoginAndPassword.surName);
+        driver.findElement(By.xpath("//*[@id=\"mat-input-4\"]")).sendKeys(name);
+        driver.findElement(By.xpath("//*[@id=\"mat-input-5\"]")).sendKeys(surName);
 
         //sex
         driver.findElement(By.xpath("//*[@id=\"mat-select-value-7\"]/span")).click();
@@ -147,13 +148,8 @@ public class AllCities {
         TimeUnit.SECONDS.sleep(2);
 
         //date of birthday
-        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(LoginAndPassword.dayOfBirth);
+        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(dateOfBirth);
         TimeUnit.SECONDS.sleep(1);
-        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(LoginAndPassword.monthOfBirth);
-        TimeUnit.SECONDS.sleep(1);
-        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(LoginAndPassword.yearOfBirth);
-        TimeUnit.SECONDS.sleep(1);
-
 
         //country
         driver.findElement(By.xpath("//*[@id=\"mat-select-value-9\"]/span")).click();
@@ -162,28 +158,35 @@ public class AllCities {
         TimeUnit.SECONDS.sleep(2);
 
         //number of pasport
-        driver.findElement(By.xpath("//*[@id=\"mat-input-6\"]")).sendKeys(LoginAndPassword.passportNumber);
+        driver.findElement(By.xpath("//*[@id=\"mat-input-6\"]")).sendKeys(passportNumber);
         TimeUnit.SECONDS.sleep(2);
 
 
         //passport validity period
-        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endDayOfPassport);
-        TimeUnit.SECONDS.sleep(1);
-        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endMonthOfPassport);
-        TimeUnit.SECONDS.sleep(1);
-        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endYearOfPassport);
+        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endDateOfPassport);
         TimeUnit.SECONDS.sleep(2);
 
         //country number
-        driver.findElement(By.xpath("//*[@id=\"mat-input-7\"]")).sendKeys(LoginAndPassword.countryNumber);
+        driver.findElement(By.xpath("//*[@id=\"mat-input-7\"]")).sendKeys(countryNumber);
 
         //number
-        driver.findElement(By.xpath("//*[@id=\"mat-input-8\"]")).sendKeys(LoginAndPassword.contactNumber);
+        driver.findElement(By.xpath("//*[@id=\"mat-input-8\"]")).sendKeys(contactNumber);
 
         //email
-        driver.findElement(By.xpath("//*[@id=\"mat-input-9\"]")).sendKeys(LoginAndPassword.LGN);
+        driver.findElement(By.xpath("//*[@id=\"mat-input-9\"]")).sendKeys(LGN);
         TimeUnit.SECONDS.sleep(2);
 
+        authenticationSMS(driver);
 
     }
+
+    public static void authenticationSMS(WebDriver driver){
+        driver.get("https://ioauth.raschet.by/oauth/authorize?client_id=uQv6qI8iYhhQBBd77t73WnD45ZpiDauk&scope=msi_national_id_number+msi_subject&response_type=token&authentication=online_otp&redirect_uri=https://ticketing.raschet.by/vfs/web");
+        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[1]/input")).sendKeys(identificationNumber);
+        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[2]/div/input")).sendKeys("+" + countryNumber + contactNumber);
+        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[4]/button[1]")).click();
+
+    }
+
+
 }
