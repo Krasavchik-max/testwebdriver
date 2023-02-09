@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,12 +27,13 @@ public class AllCities {
         // Setup 100 iterations of log in log out
         for (int i = 1; i < 100; i++) {
             //driver launch
-            System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "c:\\Users\\Max\\IdeaProjects\\webdriver\\chromedriver.exe");
             WebDriver driver = new ChromeDriver();
 
             // open login page, and login
             driver.get("https://visa.vfsglobal.com/blr/ru/pol/login");
             new WebDriverWait(driver, 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.id("mat-input-0")));
+            TimeUnit.SECONDS.sleep(5);
             driver.findElement(By.id("mat-input-0")).sendKeys(LGN);
             driver.findElement(By.id("mat-input-1")).sendKeys(PSWD);
             TimeUnit.SECONDS.sleep(5);
@@ -44,7 +46,7 @@ public class AllCities {
             TimeUnit.SECONDS.sleep(15);
 
             //click booking button
-            driver.findElement(By.xpath("//button[contains(@class,'z-index-999')]")).click();
+            driver.findElement(By.xpath("/html/body/app-root/div/app-dashboard/section[1]/div/div[1]/div[2]/button")).click();
             TimeUnit.SECONDS.sleep(10);
 
             // Setup 2 iterations of get dates
@@ -56,6 +58,7 @@ public class AllCities {
             driver.close();
         }
     }
+
     //city array
     public static String[] cities = {"Grodno", "Lida", "Minsk", "Baranovichi", "Brest", "Pinsk", "Gomel", "Mogilev"};
 
@@ -94,21 +97,25 @@ public class AllCities {
                 Statement statement = connection.createStatement();
                 statement.execute("insert into visacenter (city,message,date,time) values ('" + cities[i] + "','" + textElement + "',current_date(),current_timestamp())");
                 System.out.println("Add to DB successfully" + "\n");
-            }
-            catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
 
             if (cities[i].equals("Grodno") && (!textElement.equals("В настоящее время нет свободных мест для записи") &&
                     !textElement.equals("Произошла ошибка. Пожалуйста, попробуйте еще раз через некоторое время."))) {
+                driver.findElement(By.xpath("/html/body/app-root/div/app-eligibility-criteria/section/form/mat-card[2]/button")).click();
+                TimeUnit.SECONDS.sleep(3);
                 fillForm(driver);
-                sendEmail("Theme","Subject");
+                sendEmail("Theme", "Subject");
                 System.out.println("ЕСТЬ ДАТЫ !!!");
             }
         }
     }
+
     public static void fillForm(WebDriver driver) throws InterruptedException {
         String[] arrayDateOfBirth = dateOfBirth.split("/");
+        String[] arrayDateOfPassport = endDateOfPassport.split("/");
+
         //identification number
         driver.findElement(By.xpath("//*[@id=\"mat-input-2\"]")).sendKeys(identificationNumber);
 
@@ -119,19 +126,17 @@ public class AllCities {
         //sex
         driver.findElement(By.xpath("//*[@id=\"mat-select-value-7\"]/span")).click();
         TimeUnit.SECONDS.sleep(2);
-        driver.findElement(By.xpath("//*[@id=\"mat-option-254\"]/span")).click();
+        driver.findElement(By.xpath("/html/body/div[5]/div[2]/div/div/div/mat-option[1]/span")).click();
         TimeUnit.SECONDS.sleep(2);
 
         //date of birthday
-        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(dateOfBirth);
+        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(arrayDateOfBirth);
         TimeUnit.SECONDS.sleep(1);
-
-
 
         //country
         driver.findElement(By.xpath("//*[@id=\"mat-select-value-9\"]/span")).click();
         TimeUnit.SECONDS.sleep(1);
-        driver.findElement(By.xpath("//*[@id=\"mat-option-33\"]/span")).click();
+        driver.findElement(By.xpath("/html/body/div[5]/div[2]/div/div/div/mat-option[17]/span")).click();
         TimeUnit.SECONDS.sleep(2);
 
         //number of pasport
@@ -140,7 +145,7 @@ public class AllCities {
 
 
         //passport validity period
-        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endDateOfPassport);
+        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(arrayDateOfPassport);
         TimeUnit.SECONDS.sleep(2);
 
         //country number
@@ -153,12 +158,15 @@ public class AllCities {
         driver.findElement(By.xpath("//*[@id=\"mat-input-9\"]")).sendKeys(LGN);
         TimeUnit.SECONDS.sleep(2);
 
-        authenticationSMS(driver);
+        authenticationSMS();
 
     }
 
-    public static void authenticationSMS(WebDriver driver){
+    public static void authenticationSMS() throws InterruptedException {
+        System.setProperty("webdriver.chrome.driver", "c:\\Users\\Max\\IdeaProjects\\webdriver\\chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
         driver.get("https://ioauth.raschet.by/oauth/authorize?client_id=uQv6qI8iYhhQBBd77t73WnD45ZpiDauk&scope=msi_national_id_number+msi_subject&response_type=token&authentication=online_otp&redirect_uri=https://ticketing.raschet.by/vfs/web");
+        TimeUnit.SECONDS.sleep(2);
         driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[1]/input")).sendKeys(identificationNumber);
         driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[2]/div/input")).sendKeys("+" + countryNumber + contactNumber);
         driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[4]/button[1]")).click();
