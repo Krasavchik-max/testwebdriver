@@ -22,7 +22,7 @@ public class OneCity {
         timer(5000L);
 
         //close cookie's window
-        driver.findElement(By.xpath("//*[@id=\"onetrust-close-btn-container\"]/button")).click();
+        driver.findElement(By.xpath("//*[@id='onetrust-close-btn-container']/button")).click();
 
         //Click Login button
         driver.findElement(By.xpath("//button[contains(@class,'ng-star-inserted')]")).click();
@@ -33,12 +33,12 @@ public class OneCity {
         timer(2000L);
 
         //select VC
-        driver.findElement(By.xpath("//*[@id=\"mat-select-value-1\"]/span")).click();
+        driver.findElement(By.xpath("//*[@id='mat-select-value-1']/span")).click();
         driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-Grodno')]")).click();
         timer(10000L);
 
         //select category
-        driver.findElement(By.xpath("//*[@id=\"mat-select-value-3\"]/span")).click();
+        driver.findElement(By.xpath("//*[@id='mat-select-value-3']/span")).click();
         driver.findElement(By.xpath("//span[contains(text(), ' National Visa D ')]")).click();
         timer(10000L);
 
@@ -66,11 +66,11 @@ public class OneCity {
     public static void changeVisaType(WebDriver driver) {
 
         timer(10000L);
-        driver.findElement(By.xpath("//*[@id=\"mat-select-value-5\"]/span")).click();
+        driver.findElement(By.xpath("//*[@id='mat-select-value-5']/span")).click();
         timer(2000L);
         driver.findElement(By.xpath("//span[contains(text(),'Other D-visa')]")).click();
         timer(10000L);
-        driver.findElement(By.xpath("//*[@id=\"mat-select-value-5\"]/span")).click();
+        driver.findElement(By.xpath("//*[@id='mat-select-value-5']/span")).click();
         timer(2000L);
         driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
         timer(10000L);

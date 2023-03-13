@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
+
 import static org.example.LoginAndPassword.*;
 
 public class AllCities {
@@ -39,15 +40,15 @@ public class AllCities {
             TimeUnit.SECONDS.sleep(5);
 
             //close cookie's window
-            driver.findElement(By.xpath("//*[@id=\"onetrust-close-btn-container\"]/button")).click();
+            driver.findElement(By.xpath("//*[@id='onetrust-close-btn-container']/button")).click();
 
             // click Login button
             driver.findElement(By.xpath("//button[contains(@class,'ng-star-inserted')]")).click();
-            TimeUnit.SECONDS.sleep(15);
+            TimeUnit.SECONDS.sleep(25);
 
             //click booking button
             driver.findElement(By.xpath("//button[contains(@class,'z-index-999')]")).click();
-            TimeUnit.SECONDS.sleep(10);
+            TimeUnit.SECONDS.sleep(15);
 
             // Setup 3 iterations of get dates
             for (int j = 0; j < 3; j++) {
@@ -65,11 +66,11 @@ public class AllCities {
     public static Integer getDatesFromAllCities(WebDriver driver) {
         try {
             //city array
-            String[] cities = {"Grodno", "Lida", "Baranovichi", "Brest", "Pinsk"};
+            String[] cities = {"Grodno", "Lida", "Pinsk", "Brest", "Baranovichi"};
 
             for (int i = 0; i < cities.length; i++) {
                 //select city
-                driver.findElement(By.xpath("//*[@id=\"mat-select-value-1\"]/span")).click();
+                driver.findElement(By.xpath("//*[@id='mat-select-value-1']/span")).click();
                 System.out.println(cities[i]);
                 TimeUnit.SECONDS.sleep(2);
                 driver.findElement(By.xpath("//span[contains(text(),'Poland Visa Application Center-" + cities[i] + "')]")).click();
@@ -77,16 +78,16 @@ public class AllCities {
 
                 // select kind of visa
                 new WebDriverWait(driver, 20)
-                        .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@id=\"mat-select-value-3\"]/span")));
-                driver.findElement(By.xpath("//*[@id=\"mat-select-value-3\"]/span")).click();
+                        .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@id='mat-select-value-3']/span")));
+                driver.findElement(By.xpath("//*[@id='mat-select-value-3']/span")).click();
                 TimeUnit.SECONDS.sleep(2);
                 driver.findElement(By.xpath("//span[contains(text(), ' National Visa D ')]")).click();
                 TimeUnit.SECONDS.sleep(5);
 
                 // select type of visa
                 new WebDriverWait(driver, 20)
-                        .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@id=\"mat-select-value-5\"]/span")));
-                driver.findElement(By.xpath("//*[@id=\"mat-select-value-5\"]/span")).click();
+                        .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@id='mat-select-value-5']/span")));
+                driver.findElement(By.xpath("//*[@id='mat-select-value-5']/span")).click();
                 TimeUnit.SECONDS.sleep(2);
                 driver.findElement(By.xpath("//span[contains(text(),' Karta Polaka D-visa ')]")).click();
 //            TimeUnit.SECONDS.sleep(10);
@@ -106,13 +107,14 @@ public class AllCities {
                 statement.execute("insert into visacenter (city,message,date,time) values ('" + cities[i] + "','" + textElement + "',current_date(),current_timestamp())");
 //                System.out.println("Add to DB successfully" + "\n");
 
-                if (cities[i].equals("Grodno") && (!textElement.equals("В настоящее время нет свободных мест для записи") &&
+                if (cities[i].equals("Lida") && (!textElement.equals("В настоящее время нет свободных мест для записи") &&
                         !textElement.equals("Произошла ошибка. Пожалуйста, попробуйте еще раз через некоторое время."))) {
                     PlayAudio.main();
                     SendEmail.sendEmail("ЕСТЬ ДАТЫ !!! - " + cities[i], cities[i] + " " + textElement);
                     System.out.println("ЕСТЬ ДАТЫ !!!");
-                    //  fillForm(driver);
-                    //  authenticationSMS(driver);
+                    fillForm(driver);
+                    authenticationSMS();
+                    System.exit(1);
                 }
             }
         } catch (Exception e) {
@@ -124,54 +126,54 @@ public class AllCities {
     }
 
     public static void fillForm(WebDriver driver) throws InterruptedException {
-        String[] arrayDateOfBirth = dateOfBirth.split("/");
+        driver.findElement(By.cssSelector("button.mat-raised-button")).click();
+        TimeUnit.SECONDS.sleep(5);
+
         //identification number
-        driver.findElement(By.xpath("//*[@id=\"mat-input-2\"]")).sendKeys(identificationNumber);
+        driver.findElement(By.xpath("//*[@id='mat-input-2']")).sendKeys(identificationNumber);
 
         //name and surname
-        driver.findElement(By.xpath("//*[@id=\"mat-input-4\"]")).sendKeys(name);
-        driver.findElement(By.xpath("//*[@id=\"mat-input-5\"]")).sendKeys(surName);
-
-        //sex
-        driver.findElement(By.xpath("//*[@id=\"mat-select-value-7\"]/span")).click();
-        TimeUnit.SECONDS.sleep(2);
-        driver.findElement(By.xpath("//*[@id=\"mat-option-254\"]/span")).click();
-        TimeUnit.SECONDS.sleep(2);
-
-        //date of birthday
-        driver.findElement(By.xpath("//*[@id=\"dateOfBirth\"]")).sendKeys(dateOfBirth);
-        TimeUnit.SECONDS.sleep(1);
-
-        //country
-        driver.findElement(By.xpath("//*[@id=\"mat-select-value-9\"]/span")).click();
-        TimeUnit.SECONDS.sleep(1);
-        driver.findElement(By.xpath("//*[@id=\"mat-option-33\"]/span")).click();
-        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.xpath("//*[@id='mat-input-4']")).sendKeys(name);
+        driver.findElement(By.xpath("//*[@id='mat-input-5']")).sendKeys(surName);
 
         //number of pasport
-        driver.findElement(By.xpath("//*[@id=\"mat-input-6\"]")).sendKeys(passportNumber);
-        TimeUnit.SECONDS.sleep(2);
-
-        //passport validity period
-        driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endDateOfPassport);
-        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.xpath("//*[@id='mat-input-6']")).sendKeys(passportNumber);
 
         //country number
-        driver.findElement(By.xpath("//*[@id=\"mat-input-7\"]")).sendKeys(countryNumber);
+        driver.findElement(By.xpath("//*[@id='mat-input-7']")).sendKeys(countryNumber);
 
-        //number
-        driver.findElement(By.xpath("//*[@id=\"mat-input-8\"]")).sendKeys(contactNumber);
+        //phone number
+        driver.findElement(By.xpath("//*[@id='mat-input-8']")).sendKeys(contactNumber);
 
         //email
-        driver.findElement(By.xpath("//*[@id=\"mat-input-9\"]")).sendKeys(LGN);
-        TimeUnit.SECONDS.sleep(2);
+        driver.findElement(By.xpath("//*[@id='mat-input-9']")).sendKeys(LGN);
+
+        //sex
+        driver.findElement(By.xpath("//div[@id='mat-select-value-7']/span")).click();
+        TimeUnit.SECONDS.sleep(1);
+        driver.findElement(By.xpath("//span[contains(text(), '"+ sex + "')]")).click();
+
+        //country
+        driver.findElement(By.xpath("//*[@id='mat-select-value-9']/span")).click();
+        TimeUnit.SECONDS.sleep(1);
+        driver.findElement(By.xpath("//span[contains(text(), 'BELARUS')]")).click();
+
+        //date of birthday
+        driver.findElement(By.xpath("//*[@id='dateOfBirth']")).sendKeys(dateOfBirth);
+
+        //passport validity period
+        driver.findElement(By.xpath("//input[@id='passportExpirtyDate']")).sendKeys(LoginAndPassword.endDateOfPassport);
     }
 
-    public static void authenticationSMS(WebDriver driver) {
-        driver.get("https://ioauth.raschet.by/oauth/authorize?client_id=uQv6qI8iYhhQBBd77t73WnD45ZpiDauk&scope=msi_national_id_number+msi_subject&response_type=token&authentication=online_otp&redirect_uri=https://ticketing.raschet.by/vfs/web");
-        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[1]/input")).sendKeys(identificationNumber);
-        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[2]/div/input")).sendKeys("+" + countryNumber + contactNumber);
-        driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[4]/button[1]")).click();
+    public static void authenticationSMS() throws InterruptedException {
+        WebDriver driver2 = new ChromeDriver();
+        driver2.get("https://ticketing.raschet.by/vfs/web");
+        TimeUnit.SECONDS.sleep(3);
+
+        driver2.findElement(By.xpath("//input[@name='personal_number']")).sendKeys(identificationNumber);
+        driver2.findElement(By.xpath("//input[@name='phone']")).sendKeys("+" + countryNumber + contactNumber);
+        TimeUnit.SECONDS.sleep(1);
+        driver2.findElement(By.xpath("//button[@name='submit']")).click();
 
     }
 
