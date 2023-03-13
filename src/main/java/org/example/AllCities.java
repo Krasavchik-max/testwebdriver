@@ -5,23 +5,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
-
 import static org.example.LoginAndPassword.*;
-import static org.example.SendEmail.sendEmail;
 
 public class AllCities {
 
-    public static void main(String[] args) throws ClassNotFoundException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException, IOException {
+    public static void main(String[] args) {
 
         // Setup 100 iterations of log in log out
         for (int i = 1; i < 100; i++) {
@@ -67,10 +62,10 @@ public class AllCities {
 
 
     // select category and visa type
-    public static Integer getDatesFromAllCities(WebDriver driver) throws InterruptedException, UnsupportedAudioFileException, LineUnavailableException, IOException {
+    public static Integer getDatesFromAllCities(WebDriver driver) {
         try {
             //city array
-            String[] cities = {"Grodno", "Lida", "Minsk", "Baranovichi", "Brest", "Pinsk", "Gomel", "Mogilev"};
+            String[] cities = {"Grodno", "Lida", "Baranovichi", "Brest", "Pinsk"};
 
             for (int i = 0; i < cities.length; i++) {
                 //select city
@@ -103,27 +98,22 @@ public class AllCities {
                 System.out.println(textElement);
                 TimeUnit.SECONDS.sleep(3);
 
-
                 //connect to DB and send request
-                try {
-                    //CREATE TABLE visacenter(id INT auto_increment primary key, date DATE not null,time TIME not null, city VARCHAR(15) not null, message VARCHAR(80) not null)
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection connection = DriverManager.getConnection(LoginAndPassword.URL, LoginAndPassword.USER, LoginAndPassword.PASSWORD);
-                    Statement statement = connection.createStatement();
-                    statement.execute("insert into visacenter (city,message,date,time) values ('" + cities[i] + "','" + textElement + "',current_date(),current_timestamp())");
+                //CREATE TABLE visacenter(id INT auto_increment primary key, date DATE not null,time TIME not null, city VARCHAR(15) not null, message VARCHAR(80) not null)
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection connection = DriverManager.getConnection(LoginAndPassword.URL, LoginAndPassword.USER, LoginAndPassword.PASSWORD);
+                Statement statement = connection.createStatement();
+                statement.execute("insert into visacenter (city,message,date,time) values ('" + cities[i] + "','" + textElement + "',current_date(),current_timestamp())");
 //                System.out.println("Add to DB successfully" + "\n");
 
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
                 if (cities[i].equals("Grodno") && (!textElement.equals("В настоящее время нет свободных мест для записи") &&
                         !textElement.equals("Произошла ошибка. Пожалуйста, попробуйте еще раз через некоторое время."))) {
                     PlayAudio.main();
                     SendEmail.sendEmail("ЕСТЬ ДАТЫ !!! - " + cities[i], cities[i] + " " + textElement);
                     System.out.println("ЕСТЬ ДАТЫ !!!");
-                    fillForm(driver);
+                    //  fillForm(driver);
+                    //  authenticationSMS(driver);
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,9 +122,10 @@ public class AllCities {
         }
         return 10;
     }
+
     public static void fillForm(WebDriver driver) throws InterruptedException {
         String[] arrayDateOfBirth = dateOfBirth.split("/");
-                //identification number
+        //identification number
         driver.findElement(By.xpath("//*[@id=\"mat-input-2\"]")).sendKeys(identificationNumber);
 
         //name and surname
@@ -161,7 +152,6 @@ public class AllCities {
         driver.findElement(By.xpath("//*[@id=\"mat-input-6\"]")).sendKeys(passportNumber);
         TimeUnit.SECONDS.sleep(2);
 
-
         //passport validity period
         driver.findElement(By.xpath("/html/body/app-root/div/app-applicant-details/section/mat-card[1]/form/app-dynamic-form/div/div/app-dynamic-control[9]/div/div[2]/div/app-ngb-datepicker/div/div[2]/input")).sendKeys(LoginAndPassword.endDateOfPassport);
         TimeUnit.SECONDS.sleep(2);
@@ -175,12 +165,9 @@ public class AllCities {
         //email
         driver.findElement(By.xpath("//*[@id=\"mat-input-9\"]")).sendKeys(LGN);
         TimeUnit.SECONDS.sleep(2);
-
-        authenticationSMS(driver);
-
     }
 
-    public static void authenticationSMS(WebDriver driver){
+    public static void authenticationSMS(WebDriver driver) {
         driver.get("https://ioauth.raschet.by/oauth/authorize?client_id=uQv6qI8iYhhQBBd77t73WnD45ZpiDauk&scope=msi_national_id_number+msi_subject&response_type=token&authentication=online_otp&redirect_uri=https://ticketing.raschet.by/vfs/web");
         driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[1]/input")).sendKeys(identificationNumber);
         driver.findElement(By.xpath("/html/body/div[1]/div/form/fieldset/div[2]/div/input")).sendKeys("+" + countryNumber + contactNumber);
